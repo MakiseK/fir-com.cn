@@ -6,43 +6,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>【Xposed】新版微信(7.x)混淆函数变动解析</title>
 </head>
-    
+
 <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.bootcdn.net/ajax/libs/marked/1.1.0/marked.min.js"></script>
-    <script>
+<script>
     $.get('./Static/md/index.md', function(response, status, xhr){
         $("#content").html(marked(response));
     });
+
+
+
+
 </script>
 
 <body>
-    <section class="_3Z3nHf">
-        <p id='content'>近日参考大神的文章做了微信摇骰子的Hook操作，但是7.0.7新版一直不生效，期间解决问题的思路及未解决问题，在此分享下：
+<section class="_3Z3nHf">
+    <h1 style="text-align:center;font-size:34px">【Xposed】新版微信(7.x)混淆函数变动解析</h1></br>
+    <p id='content'>近日参考大神的文章做了微信摇骰子的Hook操作，但是7.0.7新版一直不生效，期间解决问题的思路及未解决问题，在此分享下：</br>
+        </br>
+        摇骰子模块代码整体结构做了变动，但是获得随机数的方法没有变，通过DDMS - Method
+        Profiling及相关代码跟踪我们获取到该版本随机数方法位于com.tencent.mm.sdk.platformtools.bo类中，方法名为m6if，但是hook的时候出现了NoSuchMethodException的问题...解决思路如下：
 
-摇骰子模块代码整体结构做了变动，但是获得随机数的方法没有变，通过DDMS - Method Profiling及相关代码跟踪我们获取到该版本随机数方法位于com.tencent.mm.sdk.platformtools.bo类中，方法名为m6if，但是hook的时候出现了NoSuchMethodException的问题...解决思路如下：
+    <p style="font-weight:900;font-size:20px">  </br>使用JADX反编译对比新旧微信源码</p>
+    </br>
+    <div style="text-align:center"><img src="img/1_1.jpg" style="margin: 0 auto"></div>
+    <p class='tuzhu'>6.6.7版本摇骰子随机数方法</p>
+    <div style="text-align:center"><img src="img/1_2.png"></br></div>
+    <p class='tuzhu'> 7.0.7版本摇骰子随机数方法</p>
+    </br>我们可以发现多了一行注释
 
-使用JADX反编译对比新旧微信源码
-            <img src="img/1_1.jpg">
-6.6.7版本摇骰子随机数方法
-            <img src="img/1_2.png">
-7.0.7版本摇骰子随机数方法
-我们可以发现多了一行注释
+    /* renamed from: if reason: not valid java name */
 
-/* renamed from: if reason: not valid java name */
+    大概意思是如果出现无效的java命名时需要重命名，同时观察该混淆方法名发现其中包含数字和if关键字（正常混淆后方法名应是大小写字母混合），至于AppMethodBeat无需理会，经过调查这个是Matrix（微信研发日常使用的
+    APM）
+    这里到底出现什么问题了呢？根据以往的经验，出现异常代码时，使用JD-GUI试试看...
+    </br>
+    <p style="font-weight:900;font-size:20px"></br>JD-GUI反编译</p></br>
+    <div style="text-align:center"><img src="img/1_3.png"></div>
+    <p class='tuzhu'> JD-GUI反编译结果</p> </br>
+    现在我们终于知道为什么明明类名、方法名、参数列表没有错，但是m6if无法被hook到，因为方法名压根就不是m6if啊....
 
-大概意思是如果出现无效的java命名时需要重命名，同时观察该混淆方法名发现其中包含数字和if关键字（正常混淆后方法名应是大小写字母混合），至于AppMethodBeat无需理会，经过调查这个是Matrix（微信研发日常使用的 APM）
-这里到底出现什么问题了呢？根据以往的经验，出现异常代码时，使用JD-GUI试试看...
+    我们都知道java关键字不可以作为方法、类、参数等命名，至于为什么这里java关键字可以作为方法名，参考鸿洋大神的文章：
+    “丧心病狂”的混淆操作！
 
-JD-GUI反编译
-            <img src="img/1_3.png">
-JD-GUI反编译结果
-现在我们终于知道为什么明明类名、方法名、参数列表没有错，但是m6if无法被hook到，因为方法名压根就不是m6if啊....
-
-我们都知道java关键字不可以作为方法、类、参数等命名，至于为什么这里java关键字可以作为方法名，参考鸿洋大神的文章：
-“丧心病狂”的混淆操作！
-
-遗憾的是，目前使用xposed hook方法名为关键字时，没有报NoSuchMethodException，但是hook依然没有生效，目前暂未找到问题原因，从getDeclaredMethod方法源码也没找到所以然，在此请求各路大神，有知道这个问题如何解决的，还请赐教~</p>
-    </section>
+    遗憾的是，目前使用xposed
+    hook方法名为关键字时，没有报NoSuchMethodException，但是hook依然没有生效，目前暂未找到问题原因，从getDeclaredMethod方法源码也没找到所以然，在此请求各路大神，有知道这个问题如何解决的，还请赐教~
+    </p>
+</section>
 </body>
 <style>
     * {
@@ -57,7 +67,9 @@ JD-GUI反编译结果
         background-color: rgb(249, 249, 249);
         font-family: -apple-system, BlinkMacSystemFont, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
         font-feature-settings: "tnum";
-        font-variant: tabular-nums
+        font-variant: tabular-nums;
+        padding: 30px;
+
     }
 
     .QxT4hD {
@@ -96,14 +108,18 @@ JD-GUI反编译结果
         padding-bottom: 48px;
         border-bottom: 1px solid #eee
     }
+.tuzhu{
+   color:#999999;
+        text-align: center;
 
+}
     ._3Z3nHf {
         background-color: #fff;
         border-radius: 4px;
         margin-bottom: 10px;
         padding: 16px;
-        width: 100%;
-        margin: 30px;
+        width: 80%;
+  margin:0 auto;
     }
 
     .QHRnq8 {
@@ -194,6 +210,17 @@ JD-GUI反编译结果
         text-decoration: none;
         outline: 0
     }
+
+    //水平居中
+.aligncenter {
+    clear: both;
+    display: block;
+    margin: auto;
+}
+
+
+
+
 </style>
 
 </html>
