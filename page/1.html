@@ -9,7 +9,7 @@
 
 <body>
     <section class="_3Z3nHf">
-        近日参考大神的文章做了微信摇骰子的Hook操作，但是7.0.7新版一直不生效，期间解决问题的思路及未解决问题，在此分享下：
+        <p>近日参考大神的文章做了微信摇骰子的Hook操作，但是7.0.7新版一直不生效，期间解决问题的思路及未解决问题，在此分享下：
 
 摇骰子模块代码整体结构做了变动，但是获得随机数的方法没有变，通过DDMS - Method Profiling及相关代码跟踪我们获取到该版本随机数方法位于com.tencent.mm.sdk.platformtools.bo类中，方法名为m6if，但是hook的时候出现了NoSuchMethodException的问题...解决思路如下：
 
@@ -30,7 +30,7 @@ JD-GUI反编译结果
 我们都知道java关键字不可以作为方法、类、参数等命名，至于为什么这里java关键字可以作为方法名，参考鸿洋大神的文章：
 “丧心病狂”的混淆操作！
 
-遗憾的是，目前使用xposed hook方法名为关键字时，没有报NoSuchMethodException，但是hook依然没有生效，目前暂未找到问题原因，从getDeclaredMethod方法源码也没找到所以然，在此请求各路大神，有知道这个问题如何解决的，还请赐教~
+遗憾的是，目前使用xposed hook方法名为关键字时，没有报NoSuchMethodException，但是hook依然没有生效，目前暂未找到问题原因，从getDeclaredMethod方法源码也没找到所以然，在此请求各路大神，有知道这个问题如何解决的，还请赐教~</p>
     </section>
 </body>
 <style>
