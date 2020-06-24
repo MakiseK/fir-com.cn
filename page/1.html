@@ -7,23 +7,11 @@
     <title>【Xposed】新版微信(7.x)混淆函数变动解析</title>
 </head>
 
-<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdn.bootcdn.net/ajax/libs/marked/1.1.0/marked.min.js"></script>
-<script>
-    $.get('./Static/md/index.md', function(response, status, xhr){
-        $("#content").html(marked(response));
-    });
-
-
-
-
-</script>
-
 <body>
 <section class="_3Z3nHf">
     <h1 style="text-align:center;font-size:34px">【Xposed】新版微信(7.x)混淆函数变动解析</h1></br>
-    <p id='content'>近日参考大神的文章做了微信摇骰子的Hook操作，但是7.0.7新版一直不生效</br></br>期间解决问题的思路及未解决问题，在此分享下：</br>
-        </br>
+    <p id='content'>近日参考大神的文章做了微信摇骰子的Hook操作，但是7.0.7新版一直不生效</br>期间解决问题的思路及未解决问题，在此分享下：</br></br>
+        
         摇骰子模块代码整体结构做了变动，但是获得随机数的方法没有变，通过DDMS - Method
         Profiling及相关代码跟踪我们获取到该版本随机数方法位于com.tencent.mm.sdk.platformtools.bo类中，方法名为m6if，但是hook的时候出现了NoSuchMethodException的问题...解决思路如下：
 
