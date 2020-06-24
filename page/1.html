@@ -47,7 +47,7 @@
     现在我们终于知道为什么明明类名、方法名、参数列表没有错，但是m6if无法被hook到，因为方法名压根就不是m6if啊....</br>
 
     我们都知道java关键字不可以作为方法、类、参数等命名，至于为什么这里java关键字可以作为方法名，参考鸿洋大神的文章：</br>
-<a href='https://mp.weixin.qq.com/s/ya0RiLuHfIBrPLkl2lTbaA>'“丧心病狂”的混淆操作！</a>
+<a href='https://mp.weixin.qq.com/s/ya0RiLuHfIBrPLkl2lTbaA'>“丧心病狂”的混淆操作！</a>
 </br>
     遗憾的是，目前使用xposed
     hook方法名为关键字时，没有报NoSuchMethodException，但是hook依然没有生效，目前暂未找到问题原因，从getDeclaredMethod方法源码也没找到所以然，在此请求各路大神，有知道这个问题如何解决的，还请赐教~
