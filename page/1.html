@@ -38,17 +38,17 @@
     /* renamed from: if reason: not valid java name */
 
     大概意思是如果出现无效的java命名时需要重命名，同时观察该混淆方法名发现其中包含数字和if关键字（正常混淆后方法名应是大小写字母混合），至于AppMethodBeat无需理会，经过调查这个是Matrix（微信研发日常使用的
-    APM）
+    APM）</br>
     这里到底出现什么问题了呢？根据以往的经验，出现异常代码时，使用JD-GUI试试看...
     </br>
     <p style="font-weight:900;font-size:20px"></br>JD-GUI反编译</p></br>
     <div style="text-align:center"><img src="img/1_3.png"></div>
     <p class='tuzhu'> JD-GUI反编译结果</p> </br>
-    现在我们终于知道为什么明明类名、方法名、参数列表没有错，但是m6if无法被hook到，因为方法名压根就不是m6if啊....
+    现在我们终于知道为什么明明类名、方法名、参数列表没有错，但是m6if无法被hook到，因为方法名压根就不是m6if啊....</br>
 
-    我们都知道java关键字不可以作为方法、类、参数等命名，至于为什么这里java关键字可以作为方法名，参考鸿洋大神的文章：
+    我们都知道java关键字不可以作为方法、类、参数等命名，至于为什么这里java关键字可以作为方法名，参考鸿洋大神的文章：</br>
     “丧心病狂”的混淆操作！
-
+</br>
     遗憾的是，目前使用xposed
     hook方法名为关键字时，没有报NoSuchMethodException，但是hook依然没有生效，目前暂未找到问题原因，从getDeclaredMethod方法源码也没找到所以然，在此请求各路大神，有知道这个问题如何解决的，还请赐教~
     </p>
