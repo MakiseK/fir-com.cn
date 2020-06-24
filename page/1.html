@@ -14,7 +14,9 @@
 摇骰子模块代码整体结构做了变动，但是获得随机数的方法没有变，通过DDMS - Method Profiling及相关代码跟踪我们获取到该版本随机数方法位于com.tencent.mm.sdk.platformtools.bo类中，方法名为m6if，但是hook的时候出现了NoSuchMethodException的问题...解决思路如下：
 
 使用JADX反编译对比新旧微信源码
+            <img src="img/1_1.jpg">
 6.6.7版本摇骰子随机数方法
+            <img src="img/1_2.png">
 7.0.7版本摇骰子随机数方法
 我们可以发现多了一行注释
 
@@ -24,6 +26,7 @@
 这里到底出现什么问题了呢？根据以往的经验，出现异常代码时，使用JD-GUI试试看...
 
 JD-GUI反编译
+            <img src="img/1_3.png">
 JD-GUI反编译结果
 现在我们终于知道为什么明明类名、方法名、参数列表没有错，但是m6if无法被hook到，因为方法名压根就不是m6if啊....
 
